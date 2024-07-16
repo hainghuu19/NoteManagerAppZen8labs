@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.notemanagerappzen8labs.MainViewModel
+import com.example.notemanagerappzen8labs.Screen
 import com.example.notemanagerappzen8labs.common.enum.LoadStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +38,7 @@ fun LoginScreen(
         if(state.value.status is LoadStatus.Loading){
             CircularProgressIndicator()
         }else if (state.value.status is LoadStatus.Success){
-            // navigate here
+            navController.navigate(Screen.Home.route)
         }else{
             if(state.value.status is LoadStatus.Error){
                 mainViewModel.setError(state.value.status.description)
