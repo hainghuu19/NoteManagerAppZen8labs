@@ -2,8 +2,9 @@ package com.example.notemanagerappzen8labs.repositories
 
 import com.example.notemanagerappzen8labs.Model.NoteItem
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
-class ApiImpl: Api{
+class ApiImpl @Inject constructor() : Api{
     var notes = ArrayList<NoteItem>()
 
 
