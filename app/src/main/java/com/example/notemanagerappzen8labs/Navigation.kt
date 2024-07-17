@@ -47,11 +47,11 @@ fun Navigation() {
         composable(Screen.Home.route){
             HomeScreen(navController, viewModel = hiltViewModel<HomeViewModel>(), mainViewModel)
         }
-        composable(Screen.Detail.route+ "?noteIndex={noteIndex}",
+        composable(Screen.Detail.route + "?noteIndex={noteIndex}",
             arguments = listOf(
                 navArgument("noteIndex"){
                     type = NavType.IntType
-                    defaultValue = 1
+                    defaultValue = -1
                 }
             )
             ) {
@@ -70,7 +70,7 @@ fun Navigation() {
             arguments = listOf(
                 navArgument("noteIndex"){
                     type = NavType.IntType
-                    defaultValue = 1
+                    defaultValue = -1
                 }
             )
         ) {
