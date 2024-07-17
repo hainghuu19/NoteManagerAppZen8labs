@@ -3,6 +3,7 @@ package com.example.notemanagerappzen8labs.ui.screen.Home
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,13 +25,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.notemanagerappzen8labs.MainViewModel
+import com.example.notemanagerappzen8labs.Screen
 import com.example.notemanagerappzen8labs.common.enum.LoadStatus
-
+import com.example.notemanagerappzen8labs.ui.screen.Detail.DetailNote
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +43,9 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     mainViewModel: MainViewModel
 ) {
-    val state by viewModel.userState.collectAsState()
+    val state by viewModel.uiState.collectAsState()
+
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
     LaunchedEffect(Unit){
         viewModel.loadNote()
@@ -65,29 +70,48 @@ fun HomeScreen(
                     mainViewModel.setError(state.status.description)
                     viewModel.reset()
                 }
-                LazyColumn(Modifier.padding(16.dp)){
-                    items(state.notes.size){
-                        idx ->
-                        ListItem(
-                            modifier = Modifier.clickable {
-
-                            },
-                            overlineContent = {Text(text = state.notes[idx].dateTime.toString()) },
-                            headlineContent = {Text(text = state.notes[idx].title) },
-                            supportingContent = {Text(text = state.notes[idx].content) },
-                            trailingContent = {
-                                IconButton(onClick = {viewModel.deleteNote(state.notes[idx].dateTime)}) {
-                                    Icon(Icons.Filled.Delete, contentDescription = "")
-                                }
-                            }
-                        )
+                if(screenWidth < 600.dp){
+                    ListNote(state, navController, viewModel, false)
+                }else{
+                    Row {
+                        Box(modifier = Modifier.weight(1f)) {
+                            ListNote(state, navController, viewModel, true)
+                        }
+                        Box(modifier = Modifier.weight(1f)) {
+                            DetailNote(viewModel, state.selectedIndex, navController)
+                        }
                     }
                 }
-
             }
         }
     }
 
+}
+
+@Composable
+private fun ListNote(
+    state: HomeUiState,
+    navController: NavHostController,
+    viewModel: HomeViewModel,
+    isSplitMode: Boolean
+) {
+    LazyColumn(Modifier.padding(16.dp)) {
+        items(state.notes.size) { idx ->
+            ListItem(
+                modifier = Modifier.clickable {
+                    navController.navigate("${Screen.Detail.route}?noteIndex=${idx}")
+                },
+                overlineContent = { Text(text = state.notes[idx].dateTime.toString()) },
+                headlineContent = { Text(text = state.notes[idx].title) },
+                supportingContent = { Text(text = state.notes[idx].content) },
+                trailingContent = {
+                    IconButton(onClick = { viewModel.deleteNote(state.notes[idx].dateTime) }) {
+                        Icon(Icons.Filled.Delete, contentDescription = "")
+                    }
+                }
+            )
+        }
+    }
 }
 
 @Preview
