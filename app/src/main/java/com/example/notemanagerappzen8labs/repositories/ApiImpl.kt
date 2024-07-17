@@ -10,7 +10,7 @@ class ApiImpl @Inject constructor() : Api{
     init {
         notes.add(NoteItem(1,"1","1"))
         notes.add(NoteItem(2,"2","2"))
-        notes.add(NoteItem(3,"2","3"))
+        notes.add(NoteItem(3,"3","3"))
     }
 
 
@@ -37,6 +37,7 @@ class ApiImpl @Inject constructor() : Api{
         for(i in notes.indices){
             if(notes[i].dateTime == dt){
                 notes[i] = NoteItem(dt, title, content)
+                break
             }
         }
     }
@@ -46,6 +47,7 @@ class ApiImpl @Inject constructor() : Api{
         for (i in notes.indices){
             if(notes[i].dateTime == dt){
                 notes.removeAt(i)
+                break
             }
         }
     }

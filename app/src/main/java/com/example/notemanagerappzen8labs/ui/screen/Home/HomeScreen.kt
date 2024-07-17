@@ -51,11 +51,12 @@ fun HomeScreen(
         viewModel.loadNote()
     }
 
-
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Note Manager") })},
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
+            FloatingActionButton(onClick = {
+                navController.navigate(Screen.AddOrEdit.route)
+            }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "")
             }
         }
